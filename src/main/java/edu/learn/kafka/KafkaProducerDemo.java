@@ -21,18 +21,16 @@ public class KafkaProducerDemo {
 
         //Step 2: Create the Producer
 
-        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProperties);
 
-        //Step 3: Send data
-        System.out.println("Producing data");
-        for (int i = 0; i < 15; i++) {
-            ProducerRecord<String, String> record = new ProducerRecord<>("onv_topic", "k-" + (i % 3), "v-" + i);
-            kafkaProducer.send(record);
+        try(KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProperties)) {
+            //Step 3: Send data
+            System.out.println("Producing data");
+            for (int i = 0; i < 100; i++) {
+                ProducerRecord<String, String> record = new ProducerRecord<>("onv_topic", "k-" + (i % 20), "v-" + i);
+                kafkaProducer.send(record);
+            }
+            kafkaProducer.flush();
         }
-
-
-        kafkaProducer.flush();
-        kafkaProducer.close();
 
         System.out.println(".Done.");
     }
